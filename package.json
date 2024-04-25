@@ -1,0 +1,12 @@
+{
+  "name": "slambda",
+  "version": "1.0.0",
+  "description": "Running small language models on AWS Lambda",
+  "main": "index.mjs",
+  "author": "João Galego",
+  "license": "ISC",
+  "dependencies": {
+    "gpt4all": "^4.0.0"
+  }
+}
+  
