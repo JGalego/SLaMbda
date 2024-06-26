@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SLaMbda 🤏
+  Learn how to run small language models (SLMs) at scale on on AWS Lambda using function URLs and response streaming
+
+Globals:
+  Function:
+    Timeout: 600
+
+Resources:
+  SLaMbdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      Architectures:
+        - x86_64
+      Policies:
+        - AWSLambdaExecute
+      FunctionUrlConfig:
+        AuthType: AWS_IAM
+        InvokeMode: RESPONSE_STREAM
+    Metadata:
+      DockerTag: nodejs20.x-v1
+      DockerContext: ./slambda
+      Dockerfile: Dockerfile
+
+Outputs:
+  SLaMbdaFunction:
+    Description: SLaMbda Lambda Function ARN
+    Value: !GetAtt SLaMbdaFunction.Arn
+  SLaMbdaFunctionUrl:
+    Description: SLaMbda Lambda Function URL
+    Value: !GetAtt SLaMbdaFunctionUrl.FunctionUrl
+  SLaMbdaFunctionIamRole:
+    Description: Implicit IAM Role created for SLaMbda function
+    Value: !GetAtt SLaMbdaFunctionRole.Arn

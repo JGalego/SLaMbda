@@ -6,20 +6,52 @@ Learn how to run small language models (SLMs) at scale on [AWS Lambda](https://a
 
 ## Instructions
 
-1. Run `chmod +x setup.sh && ./setup.sh`
+0. Set up AWS credentials.
 
-2. Save the URL endpoint (`FUNCTION_URL`).
+    > 💡 For more information on how to do this, please refer to the [AWS Boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) (Developer Guide > Credentials).
+
+    ```bash
+    # Option 1: (recommended) AWS CLI
+    aws configure
+
+    # Option 2: environment variables
+    export AWS_ACCESS_KEY_ID=...
+    export AWS_SECRET_ACCESS_KEY=...
+    export AWS_DEFAULT_REGION=...
+    ```
+
+1. Build and deploy the application.
+
+    ```bash
+    # 🏗️ Build
+    sam build --use-container
+
+    # 🚀 Deploy
+    sam deploy --guided
+
+    # ❗ Don't forget to note down the function URL
+    export FUNCTION_URL=`sam list stack-outputs --stack-name slambda --output json | jq -r '.[] | select(.OutputKey == "SLaMbdaFunctionUrl") | .OutputValue'`
+    ```
 
 2. Test it out!
+
+    **SAM**
+
+    ```bash
+    sam remote invoke --stack-name slambda --event '{"body": "{\"message\": \"Explain the theory of relativity.\"}"}'
+    ```
 
     **cURL**
 
     ```bash
     curl --no-buffer \
-        --aws-sigv4 "aws:amz:$AWS_DEFAULT_REGION:lambda" \
-        --user "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" \
-        -H "x-amz-security-token: $AWS_SESSION_TOKEN" \
-        -H "content-type: application/json" \
-        -d '{"message": "Explain the theory of relativity."}' \
-        $FUNCTION_URL
+         --silent \
+         --aws-sigv4 "aws:amz:$AWS_DEFAULT_REGION:lambda" \
+         --user "$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY" \
+         -H "x-amz-security-token: $AWS_SESSION_TOKEN" \
+         -H "content-type: application/json" \
+         -d '{"message": "Explain the theory of relativity."}' \
+         $FUNCTION_URL
     ```
+
+    > ☝️ **Pro Tip:** Pipe the output through `jq -rj .kwargs.content` for a cleaner output

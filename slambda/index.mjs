@@ -4,7 +4,7 @@ import { loadModel, createCompletionStream } from 'gpt4all';
 
 const pipeline = util.promisify(stream.pipeline);
 
-const model = await loadModel("gpt4all-falcon-newbpe-q4_0.gguf", {
+const model = await loadModel(process.env.MODEL_NAME, {
     allowDownload: false,
     modelPath: ".",
     modelConfigFile: "./models3.json",
