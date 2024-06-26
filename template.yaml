@@ -6,7 +6,8 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 600
+    MemorySize: 10240
+    Timeout: 900
 
 Resources:
   SLaMbdaFunction:
@@ -24,6 +25,8 @@ Resources:
       DockerTag: nodejs20.x-v1
       DockerContext: ./slambda
       Dockerfile: Dockerfile
+      DockerBuildArgs:
+        MODEL_NAME: gpt4all-falcon-newbpe-q4_0.gguf
 
 Outputs:
   SLaMbdaFunction:

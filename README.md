@@ -53,5 +53,3 @@ Learn how to run small language models (SLMs) at scale on [AWS Lambda](https://a
          -d '{"message": "Explain the theory of relativity."}' \
          $FUNCTION_URL
     ```
-
-    > ☝️ **Pro Tip:** Pipe the output through `jq -rj .kwargs.content` for a cleaner output
